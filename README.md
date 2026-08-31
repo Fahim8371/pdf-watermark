@@ -307,27 +307,33 @@ effect immediately.
 ## Troubleshooting
 
 **`ModuleNotFoundError: No module named 'pymupdf'`**
+
 The dependency is not installed for the Python you are running. Try
 `python -m pip install pymupdf`.
 
 **`ModuleNotFoundError: No module named 'watermark'`**
+
 `batch_watermark.py` imports its engine from the same folder. Run it from inside
 the repository, or pass a full path to the script.
 
 **`no watermark text given`**
+
 Every run needs `--text "SOMETHING"` or `--company NAME`. There is no default
 text on purpose — a watermark naming the wrong party is worse than none.
 
 **Nothing happened, "No PDFs found"**
+
 The folder holds no PDFs, or everything in it was recognised as previous output.
 Output is skipped by folder name (ending in `_Watermarked`) and by filename
 (ending in `_watermarked.pdf`).
 
 **One file failed but the rest worked**
+
 Encrypted or damaged PDFs are reported with `ERR` and skipped, so one bad file
 never abandons a long batch. The exit code is `1` if anything failed.
 
 **The watermark is too subtle to notice / too loud to read through**
+
 `--opacity` first, then `--tile 4` if it needs to be genuinely hard to remove.
 
 ---
