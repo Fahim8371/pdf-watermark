@@ -1,363 +1,409 @@
-# pdf-watermark
+<div align="center">
+<h1 align="center">
+<img src="packaging/icon.png" width="100" alt="" />
+<br>
+PDF Watermark
+</h1>
+<h3 align="center">📍 Mark every page with who it was sent to — one file, a whole folder, or one copy per recipient.</h3>
+<h3 align="center">⚙️ Developed with the software and tools below:</h3>
 
-Stamp a diagonal text watermark across every page of a PDF — one file, a whole
-folder, or the same document set watermarked separately for each recipient.
+<p align="center">
+<img src="https://img.shields.io/badge/Python-3776AB.svg?style=for-the-badge&logo=Python&logoColor=white" alt="Python" />
+<img src="https://img.shields.io/badge/PyMuPDF-1F6FEB.svg?style=for-the-badge" alt="PyMuPDF" />
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=for-the-badge&logo=JavaScript&logoColor=black" alt="JavaScript" />
+<img src="https://img.shields.io/badge/HTML5-E34F26.svg?style=for-the-badge&logo=HTML5&logoColor=white" alt="HTML5" />
+<img src="https://img.shields.io/badge/CSS3-1572B6.svg?style=for-the-badge&logo=CSS3&logoColor=white" alt="CSS3" />
+<img src="https://img.shields.io/badge/pytest-0A9EDC.svg?style=for-the-badge&logo=pytest&logoColor=white" alt="pytest" />
+<img src="https://img.shields.io/badge/GitHub%20Actions-2088FF.svg?style=for-the-badge&logo=GitHub-Actions&logoColor=white" alt="GitHub Actions" />
+</p>
 
-Built on [PyMuPDF](https://pymupdf.readthedocs.io/). No font files, no external
-binaries, no network access. Originals are never modified; every watermarked
-file is written as a new copy.
+<p align="center">
+<a href="https://github.com/Fahim8371/pdf-watermark/releases/latest"><img src="https://img.shields.io/github/v/release/Fahim8371/pdf-watermark?label=release&color=4c8dff" alt="Latest release" /></a>
+<a href="https://github.com/Fahim8371/pdf-watermark/releases"><img src="https://img.shields.io/github/downloads/Fahim8371/pdf-watermark/total?color=4c8dff" alt="Downloads" /></a>
+<a href="https://github.com/Fahim8371/pdf-watermark/actions/workflows/ci.yml"><img src="https://github.com/Fahim8371/pdf-watermark/actions/workflows/ci.yml/badge.svg" alt="Tests" /></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-blue" alt="MIT licence" /></a>
+</p>
 
-![Original and watermarked page side by side](docs/before-after.png)
+<img src="docs/screenshots/design.png" width="820" alt="The Design step: recipients and text style on the left, a live preview of the watermarked page on the right" />
 
-```
-python batch_watermark.py my_folder --text "CONFIDENTIAL"
+</div>
+
+---
+
+## 📚 Table of Contents
+- [📚 Table of Contents](#-table-of-contents)
+- [📍 Overview](#-overview)
+- [💫 Features](#-features)
+- [💿 Download](#-download)
+- [📂 Project Structure](#-project-structure)
+- [🧩 Modules](#-modules)
+- [🚀 Getting Started](#-getting-started)
+- [🤖 Using PDF Watermark](#-using-pdf-watermark)
+- [🗺 Roadmap](#-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [👏 Acknowledgments](#-acknowledgments)
+
+---
+
+## 📍 Overview
+
+PDF Watermark stamps text across the pages of PDF documents so every copy you
+send out can be traced back to whoever received it. Point it at a single file
+or a whole folder of drawings and reports, add the companies the pack is going
+to, and it writes a separately marked copy of everything for each one —
+*CONFIDENTIAL – Acme Construction* on Acme's copy, *CONFIDENTIAL – Globex* on
+Globex's.
+
+It comes as a **desktop app for Windows** — no install, no account, nothing
+uploaded anywhere — and as a **command line tool** for scripts, both driven by
+the same engine. Originals are never changed; every marked document is a new copy.
+
+It was written for mixed technical document sets: a folder holding A4 letters
+next to A0 CAD drawings, rotated and cropped sheets, and files from software
+that writes unusual PDFs. Each page is measured on its own, so the mark looks
+right on all of them.
+
+---
+
+## 💫 Features
+
+| Feature | Description |
+|---|---|
+| **👥 One copy per recipient** | Add any number of companies and get a separately marked copy of the whole pack for each. Companies you send to often can be saved on your computer and added with one click. |
+| **📁 Whole folders at once** | Subfolders included and their structure kept. Anything that isn't a PDF is left alone, and damaged or password-protected files are flagged the moment you add them — not halfway through an export. |
+| **👀 Live preview** | The preview is the real result, rendered on your own pages. Click a company to see their copy; flip through every document before anything is written. |
+| **🎨 Styles that fit the page** | A bold diagonal corner to corner, a repeating tiled pattern, or a small stamp in any corner, along any edge, or wherever you drag it. Sized from each page's own dimensions, so an A4 letter and an A0 drawing both look right. |
+| **🔤 Fonts and colours** | Any font installed on your computer, with bold and italic, any colour, adjustable strength and size, and outline letters. Fonts are embedded so copies look the same everywhere. |
+| **🗓 Placeholders** | `{date}`, `{page}`, `{pages}` and `{file}` are filled in for each page — e.g. *DRAFT – 2026-10-05 – page 3 of 12*. |
+| **🔒 Extra protection** | Optionally turn pages into images, so the mark can't be selected, searched for or deleted. |
+| **🧱 Made for awkward PDFs** | Rotated and cropped pages, CAD drawings with unusual internals, files that restrict editing (their restrictions are kept), and names in any script — Cyrillic, Greek, Chinese, Japanese, Korean. |
+| **⌨️ Keyboard shortcuts** | Bold, italic, layouts, stamp positions, paging through documents — press <kbd>?</kbd> in the app for the full list. |
+| **🖥 Command line** | Every option is also a flag, for batch jobs and scripts, with a dry-run mode and a proper exit code. |
+
+---
+
+## 💿 Download
+
+📦 **[PDF-Watermark-Windows.exe](https://github.com/Fahim8371/pdf-watermark/releases/latest/download/PDF-Watermark-Windows.exe)** — about 38 MB
+
+> 💡 Runs on Windows 10 and 11. Nothing to install: download it and double-click.
+> The first time, Windows may show *"Windows protected your PC"* because the app
+> isn't code-signed yet — click **More info**, then **Run anyway**. It only asks once.
+
+All versions are on the [Releases page](https://github.com/Fahim8371/pdf-watermark/releases).
+A Mac version is planned; in the meantime the command line runs on macOS and Linux.
+
+---
+
+<img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-github-open.svg" width="80" />
+
+## 📂 Project Structure
+
+```bash
+pdf-watermark
+├── app.py                  # the desktop app: a window around the engine
+├── batch_watermark.py      # the command line
+├── watermark.py            # the engine: geometry, rotation, drawing, saving
+├── fonts.py                # built-in and installed fonts
+├── ui
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+├── tests
+│   ├── conftest.py
+│   ├── test_engine.py
+│   └── test_batch.py
+├── examples
+│   └── make_sample.py      # a sample document to practise on
+├── docs
+│   ├── make_figures.py     # draws the images in this README
+│   └── screenshots
+├── packaging
+│   ├── pdf-watermark.spec  # PyInstaller build
+│   ├── make_icons.py
+│   └── icon.png / .ico / .icns
+├── .github/workflows
+│   ├── ci.yml              # tests on every push
+│   └── release.yml         # builds and publishes the app on a version tag
+├── requirements.txt
+├── requirements-dev.txt
+├── VERSION
+└── LICENSE
 ```
 
 ---
 
-## Contents
+<img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-src-open.svg" width="80" />
 
-- [Why this exists](#why-this-exists)
-- [Step by step, from nothing](#step-by-step-from-nothing)
-- [Everyday use](#everyday-use)
-- [Options](#options)
-- [Where the output goes](#where-the-output-goes)
-- [How it fits together](#how-it-fits-together)
-- [Troubleshooting](#troubleshooting)
-- [Notes and limitations](#notes-and-limitations)
+## 🧩 Modules
+
+<details closed><summary>Root</summary>
+
+| File | Summary |
+|:---|:---|
+| [app.py](app.py) | The desktop app. Opens a window (pywebview) showing the interface in `ui/`, and gives it a bridge to Python: picking files, checking each PDF can be read, rendering previews, listing fonts, running the export on a background thread, and remembering settings and saved companies. Keeps a log for diagnosing problems on someone else's computer. |
+| [watermark.py](watermark.py) | The engine. Works out the font size, angle and position for each page from its own geometry; brings rotated pages to a rotation-free state while keeping their crop boxes; fences off CAD drawings' stray transforms; draws the text; fills in placeholders; flattens pages to images on request; and saves through a temporary file so a failed run never leaves a half-written PDF. |
+| [fonts.py](fonts.py) | Finds the fonts installed on Windows, macOS or Linux, groups them into families with their bold and italic styles, and embeds only the characters a watermark uses, so a copy grows by kilobytes rather than megabytes. |
+| [batch_watermark.py](batch_watermark.py) | The command line. Collects PDFs from files and folders (case-insensitively, skipping macOS metadata files), names every output so nothing overwrites anything else, and applies one or many watermark texts in a run. |
+
+</details>
+
+<details closed><summary>ui</summary>
+
+| File | Summary |
+|:---|:---|
+| [index.html](ui/index.html) | The three steps — Files, Design, Export — plus the shortcuts sheet. |
+| [styles.css](ui/styles.css) | The dark theme: the spotlight step bar, cards, toolbar, menus and tooltips. |
+| [app.js](ui/app.js) | Everything the interface does. Talks to `app.py`, or to a built-in mock with sample data when opened in a plain browser — handy for design work (`?demo=design`). |
+
+</details>
+
+<details closed><summary>tests</summary>
+
+| File | Summary |
+|:---|:---|
+| [test_engine.py](tests/test_engine.py) | Renders watermarked pages and checks where the ink actually lands: centred on every page size and rotation, in the right corner for every stamp position, pixel-identical page content after de-rotation, kept bookmarks and links, restrictions, fonts, flattening. |
+| [test_batch.py](tests/test_batch.py) | Finding PDFs, naming outputs, and the command line run end to end — including recipient names in Polish and Japanese. |
+
+</details>
+
+<details closed><summary>packaging & docs</summary>
+
+| File | Summary |
+|:---|:---|
+| [pdf-watermark.spec](packaging/pdf-watermark.spec) | Builds the single-file Windows `.exe` (and a macOS `.app`, for later). |
+| [make_icons.py](packaging/make_icons.py) | Draws the app icon in each platform's format. |
+| [make_figures.py](docs/make_figures.py) | Draws the example images in this README with the real engine, so they always match what the tool produces. |
+
+</details>
 
 ---
 
-## Why this exists
+## 🚀 Getting Started
 
-Most watermarking tools assume a stack of same-sized office documents. This one
-was written for mixed technical document sets — a folder holding A4 memos next
-to A0 CAD drawings, some pages rotated, some generated by software that writes
-unusual PDFs — where the naive approach produces watermarks that are tiny on one
-page, cropped on the next, and mirrored on the one after that.
+### ✅ Prerequisites
 
-The watermark is sized from each page's own geometry, so one command handles a
-document whose pages disagree about how big they are:
+> - **The app:** Windows 10 or 11. Nothing else.
+> - **The command line, or running from source:** Python 3.10 or newer, on Windows, macOS or Linux.
 
-![The same watermark on an A4 page and an A3 page](docs/page-sizes.png)
+### 🖥 Installation
 
-Three things it handles that a simple `insert_text()` loop does not:
+**The app** — [download PDF-Watermark-Windows.exe](#-download) and double-click it.
 
-- **Per-page sizing.** The font size is computed from each page's width, height
-  and the rotation angle, so the text fills the page proportionally whether it
-  is A4 or A0 — no fixed point size that only suits one paper size.
-- **Rotated pages.** A page carrying a `/Rotate` entry renders in a rotated
-  coordinate space. Drawing on it naively gives a mirrored or wrongly angled
-  watermark. Pages are normalised to a rotation-free state first.
-- **CAD-generated PDFs.** Some write an unbalanced transform into the content
-  stream, which silently drags anything appended afterwards into the wrong
-  coordinate space. The usual fix (`clean_contents()`) re-encodes font streams
-  and can corrupt these files, so a narrower fix is applied instead.
+**From source:**
 
----
-
-## Step by step, from nothing
-
-### 1. Check Python
-
-Python 3.10 or newer. In a terminal:
-
-```
-python --version
-```
-
-No Python? Install it from [python.org/downloads](https://www.python.org/downloads/).
-On Windows, tick **Add python.exe to PATH** in the installer.
-
-### 2. Get the code
-
-```
+1. Clone the repository:
+```sh
 git clone https://github.com/Fahim8371/pdf-watermark.git
+```
+
+2. Change to the project directory:
+```sh
 cd pdf-watermark
 ```
 
-No git? Use the green **Code** button above → **Download ZIP**, unzip it, then
-open a terminal in the unzipped folder.
-
-### 3. Install the one dependency
-
-```
+3. Install the dependencies:
+```sh
 pip install -r requirements.txt
 ```
 
-That is PyMuPDF and nothing else.
-
-### 4. Make a document to practise on
-
-So your first run is not against something that matters:
-
-```
-python examples/make_sample.py
-```
-
-This writes `examples/sample_report.pdf` — a two-page document with an A4 report
-page and an A3 drawing page.
-
-### 5. Watermark it
-
-```
-python batch_watermark.py examples/sample_report.pdf --text "CONFIDENTIAL"
-```
-
-```
-1 PDF(s) x 1 watermark(s) = 1 file(s) to write
-
-["CONFIDENTIAL"]
-  -> ...\pdf-watermark\examples
-  OK  sample_report.pdf
-
-Done. 1 succeeded, 0 failed.
-```
-
-Open `examples/sample_report_watermarked.pdf`. The original is untouched.
-
-### 6. Now do it to a folder
-
-Point it at a folder and it works through every PDF inside, including
-subfolders, ignoring everything that is not a PDF.
-
-**Always dry-run an unfamiliar folder first.** Nothing is written; you get the
-exact list of what would be:
-
-```
-python batch_watermark.py my_folder --text "CONFIDENTIAL" --dry-run
-```
-
-```
-2 PDF(s) x 1 watermark(s) = 2 file(s) to write [DRY RUN]
-(1 non-PDF file(s) ignored)
-
-["CONFIDENTIAL"]
-  -> ...\my_folder _CONFIDENTIAL_Watermarked
-  -> ...\my_folder _CONFIDENTIAL_Watermarked\drawings
-  [dry-run] drawings\plan.pdf
-  [dry-run] report.pdf
-
-Dry run complete - no files written.
-```
-
-Happy with the list? Run it again without `--dry-run`.
-
-### 7. Check the result
-
-Open a couple of the output files. If the watermark is too strong or too faint
-over your particular documents, adjust and re-run — the originals are still
-there, so there is nothing to undo:
-
-```
-python batch_watermark.py my_folder --text "CONFIDENTIAL" --opacity 0.25
+4. Start the app, or use the command line:
+```sh
+python app.py
+python batch_watermark.py --help
 ```
 
 ---
 
-## Everyday use
+## 🤖 Using PDF Watermark
 
-### A single file
+### The app
 
-```
-python batch_watermark.py report.pdf --text "DRAFT"
-```
+There are several ways to get your documents in:
 
-Writes `report_watermarked.pdf` next to the original.
+1. **Drag and drop** PDFs or whole folders onto the window.
+2. **Select files** or **Select folder** to browse for them.
+3. **Drop them onto the app's icon** — or the `.exe` itself — and it opens with them already added.
 
-### A folder, recursively
+<img src="docs/screenshots/drop.png" width="49%" alt="Dragging a folder onto the app" /> <img src="docs/screenshots/files.png" width="49%" alt="The Files step listing what was found, including files that can't be marked" />
 
-```
-python batch_watermark.py my_folder --text "CONFIDENTIAL"
-```
+The **Files** step shows what it found — and which files it will leave out and why.
 
-### Folders and files together
+Then, on **Design**, add the companies the copies are for and choose how the
+mark looks and where it sits; the preview updates as you go. On **Export**,
+check the summary and the list of files that will be created, pick where they
+go, and click **Watermark**.
 
-```
-python batch_watermark.py my_folder extra.pdf another_folder --text "DRAFT"
-```
+<img src="docs/screenshots/export.png" width="70%" alt="The Export step: documents, recipients and copies to create" />
 
-Paths with spaces need quotes: `"C:\Users\me\My Documents\pack"`.
+### ⌨️ Keyboard shortcuts
 
-### One run, several recipients
+| Keys | Does |
+| --- | --- |
+| <kbd>Ctrl</kbd> <kbd>O</kbd> · <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>O</kbd> | Add PDFs · add a folder |
+| <kbd>Ctrl</kbd> <kbd>Enter</kbd> | Continue, or start the export |
+| <kbd>Ctrl</kbd> <kbd>B</kbd> · <kbd>Ctrl</kbd> <kbd>I</kbd> · <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>L</kbd> | Bold · italic · outline letters |
+| <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>F</kbd> | Choose a font |
+| <kbd>D</kbd> · <kbd>T</kbd> · <kbd>S</kbd> | Diagonal · tiled · stamp |
+| <kbd>1</kbd> – <kbd>9</kbd> | Put the stamp in that spot, laid out like a number pad (<kbd>7</kbd> top left, <kbd>3</kbd> bottom right) |
+| Arrow keys | Nudge the stamp — hold <kbd>Shift</kbd> for bigger steps |
+| <kbd>[</kbd> · <kbd>]</kbd> | Previous · next document in the preview |
+| <kbd>?</kbd> | Show every shortcut |
 
-Repeat `--text` to write a separate, individually watermarked copy of the whole
-set per recipient. This is the case the tool was actually built for: sending the
-same document pack to several parties, with each copy traceable back to whoever
-it went to.
+### 🎨 Styles
 
-```
-python batch_watermark.py my_folder --text "For Acme" --text "For Globex"
-```
+![The same page in each style](docs/options.png)
 
-`--company` is shorthand for the common phrasing — each name becomes
-`CONFIDENTIAL - <name>`:
+The size is worked out from each page, so one run handles documents whose pages
+disagree about how big they are — and a diagonal always runs corner to corner:
 
-```
-python batch_watermark.py my_folder --company Acme Globex
-```
+![The same watermark on an A4 page and an A3 drawing](docs/page-sizes.png)
 
-```
-2 PDF(s) x 2 watermark(s) = 4 file(s) to write
+### The command line
 
-["CONFIDENTIAL - Acme"]
-  -> ...\my_folder _CONFIDENTIAL - Acme_Watermarked
-  OK  drawings\plan.pdf
-  OK  report.pdf
+- Show help:
+    ```
+    python batch_watermark.py --help
+    ```
+- One marked copy of a folder per company:
+    ```
+    python batch_watermark.py my_folder --company "Acme" "Globex"
+    ```
+- Your own text, with the date and page numbers filled in on every page:
+    ```
+    python batch_watermark.py report.pdf --text "DRAFT - {date} - page {page} of {pages}"
+    ```
+- A small red stamp in the bottom-right corner, in an installed font:
+    ```
+    python batch_watermark.py my_folder --company Acme --position bottom-right --color red --font "Arial"
+    ```
+- See exactly what would be written, without writing anything:
+    ```
+    python batch_watermark.py my_folder --company Acme --dry-run
+    ```
 
-["CONFIDENTIAL - Globex"]
-  -> ...\my_folder _CONFIDENTIAL - Globex_Watermarked
-  OK  drawings\plan.pdf
-  OK  report.pdf
+New to it? `python examples/make_sample.py` writes a sample document to practise on.
 
-Done. 4 succeeded, 0 failed.
-```
-
----
-
-## Options
-
-![The same page with different option settings](docs/options.png)
+<details closed><summary>Every option</summary>
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--text`, `-t` | — | Watermark text. Repeat for one copy set per text. |
-| `--company`, `-c` | — | Shorthand: each name becomes `CONFIDENTIAL - <name>`. |
-| `--out`, `-o` | alongside each source | Where output is written. |
-| `--tile` | `1` | `1` draws one large centred line. Higher values tile N diagonal bands of repeating text — harder to crop out, busier to read through. |
+| `--text`, `-t` | — | Watermark text. Repeat for one set of copies per text. Placeholders: `{date}` `{page}` `{pages}` `{file}`. |
+| `--company`, `-c` | — | Each name becomes `CONFIDENTIAL - <name>`. |
+| `--prefix` | `CONFIDENTIAL` | What `--company` puts before each name; `""` for the name alone. |
+| `--layout` | `diagonal` | `diagonal`, `tile`, or `position` for a small stamp. |
+| `--position` | `bottom-center` | Where a stamp goes: `top-left` … `bottom-right`, `center`, or `X,Y` fractions like `0.8,0.1`. |
+| `--stack` | off | Put the name on its own line under the prefix. |
+| `--font` | `Helvetica` | `Helvetica`, `Times`, `Courier`, or any installed font such as `"Georgia"`. |
+| `--bold` / `--no-bold`, `--italic` | bold | Font style. |
+| `--color` | grey | A name (`red`, `blue`, `black`, `green`, `grey`) or a hex code like `#cc0000`. |
 | `--opacity` | `0.4` | `0` invisible, `1` fully opaque. |
-| `--angle` | `45` | Degrees, counter-clockwise from horizontal. `0` is a horizontal band. |
+| `--size` | `100` | Percent of the automatic size (up to 400 for stamps). |
+| `--angle` | `diagonal` | Degrees, or `diagonal` for corner to corner on every page. |
+| `--tile N` | — | Shorthand for `--layout tile` with N bands. |
+| `--outline` | off | Hollow letters. |
+| `--flatten [DPI]` | off | Turn pages into images so the mark can't be removed. |
+| `--out`, `-o` | next to each source | Where output is written. |
 | `--suffix` | `_Watermarked` | Appended to each output folder name. |
 | `--dry-run` | off | Print what would be written, write nothing. |
 
-Colour and font are not flags, since they change far less often. They live in
-the `CONFIG` block at the top of `watermark.py`, commented value by value:
+The exit code is `0` when every file succeeded and `1` if any failed, so it can sit in a script.
 
-```python
-FONT_NAME  = "helv"             # built-in: helv, tiro, cour (+ bold/italic)
-FONT_COLOR = (0.6, 0.6, 0.6)    # RGB as 0-1 floats, not 0-255
-OPACITY    = 0.4                # the default --opacity
-```
+</details>
 
-Run `python batch_watermark.py --help` for the full list at any time.
-
----
-
-## Where the output goes
-
-A folder is copied to a sibling folder next to it, with subfolder structure
-preserved:
+### 📂 Where the output goes
 
 ```
-my_folder/                                  <- untouched
+my_folder/                                     <- untouched
     report.pdf
     drawings/plan.pdf
-my_folder _CONFIDENTIAL_Watermarked/        <- created
+my_folder _CONFIDENTIAL - Acme_Watermarked/    <- created next to it
     report_watermarked.pdf
     drawings/plan_watermarked.pdf
 ```
 
-A single file is written next to the original:
+A single file is written next to the original as `report_watermarked.pdf`.
+Re-running is safe: earlier output is recognised and skipped, so watermarks
+never stack up.
 
-```
-report.pdf                                  <- untouched
-report_watermarked.pdf                      <- created
-```
+### 🩺 If something goes wrong
 
-`--out DIR` redirects either one. With several watermark texts, output folders
-already differ by text and single-file names get the text added too, so nothing
-from one text overwrites another.
-
-Re-running is safe: previous output is recognised by folder name and filename
-suffix and skipped, so watermarks do not stack up on a second pass.
+- **A file shows "can't be marked"** — it is damaged or needs a password. Open it, save an unprotected copy, and add that.
+- **The app misbehaves** — it keeps a log at `%APPDATA%\PDF Watermark\app.log`. Attaching it to an [issue](https://github.com/Fahim8371/pdf-watermark/issues) makes the problem much quicker to find.
+- **A watermark is not access control.** It marks where a copy came from and discourages passing it on. *Extra protection* makes it much harder to remove; for real restrictions, use encryption or a rights-management system.
 
 ---
 
-## How it fits together
+## 🗺 Roadmap
 
-**`watermark.py`** — the engine. Page geometry, font sizing, rotation
-normalisation, and the drawing itself, plus a small CLI of its own for quick
-one-off jobs. The `CONFIG` block at the top holds every appearance default.
+> - [x] Desktop app for Windows, downloadable from Releases
+> - [x] One copy per recipient, saved companies
+> - [x] Diagonal, tiled and stamp layouts, drag-to-place stamps
+> - [x] Installed fonts, bold and italic, colours, outline letters
+> - [x] Placeholders: `{date}` `{page}` `{pages}` `{file}`
+> - [x] Flatten to images (*Extra protection*)
+> - [x] Tests on Windows, macOS and Linux for every change
+> - [ ] Mac app
+> - [ ] Code-signed builds, so the first-launch prompt goes away
+> - [ ] Image and logo watermarks
+> - [ ] Entering a password for protected PDFs inside the app
+> - [ ] Faster exports by marking several files at once
 
-**`batch_watermark.py`** — the command line around it: collecting paths, naming
-outputs, applying several watermarks in one run. This is the one to use.
+---
 
-**`examples/make_sample.py`** — generates the sample document used above.
+## 🤝 Contributing
 
-The engine is importable if you want to drive it yourself:
+Contributions are always welcome! Please follow these steps:
+1. Fork the project repository.
+2. Clone your fork and create a branch with a descriptive name:
+```sh
+git checkout -b fix-rotated-stamp
+```
+3. Install the development tools:
+```sh
+pip install -r requirements-dev.txt
+```
+4. Make your change, and add a test in `tests/` that would have caught the problem.
+5. Check the tests and the linter both pass:
+```sh
+python -m pytest
+ruff check .
+```
+6. Commit, push to your fork, and open a pull request describing what changed and why.
 
-```python
-import pymupdf
-import watermark as wm
+The test suite builds every PDF it needs on the fly — please never commit real documents.
 
-wm.WATERMARK_TEXT = "CONFIDENTIAL"
-wm.OPACITY = 0.3
+### 🔨 Building and releasing
 
-doc = pymupdf.open("report.pdf")
-for page in doc:
-    wm.watermark_page(page)
-doc.save("report_watermarked.pdf")
+```sh
+pyinstaller packaging/pdf-watermark.spec --noconfirm   # builds dist/PDF Watermark.exe
 ```
 
-Every config value is read at draw time, so changing one between documents takes
-effect immediately.
+Releases are built by GitHub Actions: update the `VERSION` file, commit, then
+`git tag v1.1.0 && git push --follow-tags`. The [release workflow](.github/workflows/release.yml)
+runs the tests, builds the `.exe` and publishes it on the Releases page.
 
 ---
 
-## Troubleshooting
+## 📄 License
 
-**`ModuleNotFoundError: No module named 'pymupdf'`**
+The code in this repository is licensed under the `MIT` License. See the [LICENSE](LICENSE) file for additional info.
 
-The dependency is not installed for the Python you are running. Try
-`python -m pip install pymupdf`.
-
-**`ModuleNotFoundError: No module named 'watermark'`**
-
-`batch_watermark.py` imports its engine from the same folder. Run it from inside
-the repository, or pass a full path to the script.
-
-**`no watermark text given`**
-
-Every run needs `--text "SOMETHING"` or `--company NAME`. There is no default
-text on purpose — a watermark naming the wrong party is worse than none.
-
-**Nothing happened, "No PDFs found"**
-
-The folder holds no PDFs, or everything in it was recognised as previous output.
-Output is skipped by folder name (ending in `_Watermarked`) and by filename
-(ending in `_watermarked.pdf`).
-
-**One file failed but the rest worked**
-
-Encrypted or damaged PDFs are reported with `ERR` and skipped, so one bad file
-never abandons a long batch. The exit code is `1` if anything failed.
-
-**The watermark is too subtle to notice / too loud to read through**
-
-`--opacity` first, then `--tile 4` if it needs to be genuinely hard to remove.
+The downloadable app bundles [PyMuPDF](https://pymupdf.readthedocs.io/), which is
+licensed under the [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html), so the
+app as distributed is covered by the AGPL's terms; its complete source is this repository.
 
 ---
 
-## Notes and limitations
+## 👏 Acknowledgments
 
-- **A watermark is not access control.** It is drawn as ordinary page content,
-  so anyone with the right tools can strip it out. It marks provenance and
-  discourages casual redistribution; it does not protect a document. If you need
-  real restrictions, encrypt the PDF or use a rights-management system.
-- **The text stays selectable.** It is real text, not an image, which keeps
-  files small and pages sharp, but also means it can be found by a text search.
-  That is what makes the automated checks on this repo possible.
-- **Encrypted PDFs are skipped.** A password-protected file fails with an error
-  and the batch carries on. Decrypt it first if you need it watermarked.
-- **Long paths on Windows.** Windows caps ordinary paths at 260 characters,
-  which a deep folder tree plus a long watermark name passes easily. Output
-  paths are written through the `\\?\` extended-length prefix, so this does not
-  bite partway through a large run.
-- **Scanned PDFs work but are not OCR'd.** The watermark draws fine over a
-  scanned page; the underlying page just has no text layer of its own.
-- **Exit code.** `0` when every file succeeded, `1` if any failed, so it can be
-  used in a script or CI step.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+- [PyMuPDF](https://pymupdf.readthedocs.io/) — reading, drawing on and writing PDFs
+- [fontTools](https://github.com/fonttools/fonttools) — reading and subsetting fonts
+- [pywebview](https://pywebview.flowrl.com/) — the app window
+- Ideas borrowed from other open-source watermarking tools:
+  [bastienlc/pdf-watermark](https://github.com/bastienlc/pdf-watermark),
+  [ajaxray/markpdf](https://github.com/ajaxray/markpdf),
+  [oclero/pdfwm](https://github.com/oclero/pdfwm),
+  [aanorlondo/pdf-watermark](https://github.com/aanorlondo/pdf-watermark) and
+  [TobseF/My-PDF-Watermark](https://github.com/TobseF/My-PDF-Watermark)

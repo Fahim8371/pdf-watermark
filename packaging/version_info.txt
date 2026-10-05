@@ -1,0 +1,17 @@
+# Windows file properties for the .exe (right-click > Properties > Details).
+# The release workflow rewrites the version numbers from the VERSION file.
+VSVersionInfo(
+  ffi=FixedFileInfo(filevers=(1, 0, 0, 0), prodvers=(1, 0, 0, 0)),
+  kids=[
+    StringFileInfo([StringTable('040904B0', [
+      StringStruct('CompanyName', 'pdf-watermark contributors'),
+      StringStruct('FileDescription', 'PDF Watermark'),
+      StringStruct('FileVersion', '1.0.0'),
+      StringStruct('InternalName', 'PDF Watermark'),
+      StringStruct('LegalCopyright', 'MIT licence'),
+      StringStruct('OriginalFilename', 'PDF Watermark.exe'),
+      StringStruct('ProductName', 'PDF Watermark'),
+      StringStruct('ProductVersion', '1.0.0')])]),
+    VarFileInfo([VarStruct('Translation', [1033, 1200])])
+  ]
+)

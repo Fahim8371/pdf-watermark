@@ -1,0 +1,35 @@
+name: Tests
+
+# Every push and pull request: lint once, then run the test suite on all three
+# operating systems the app ships for, across the supported Python versions.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.10", "3.11", "3.12", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      # The engine and its tests need no GUI, so pywebview is left out here.
+      - run: pip install "pymupdf>=1.24" "fonttools>=4.40" pytest
+      - run: python -m pytest -q
