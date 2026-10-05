@@ -99,6 +99,6 @@ jobs:
           **Download** the file for your computer below:
 
           - **Windows** - `PDF-Watermark-Windows.exe`. Double-click to run; nothing to install. The first time, Windows may show *"Windows protected your PC"*: click **More info**, then **Run anyway**.
-          The prompt appears because the app is not code-signed. It only happens once.
+          Built by GitHub Actions directly from this repository. See the [code signing policy](https://github.com/Fahim8371/pdf-watermark#-code-signing-policy) and [privacy policy](https://github.com/Fahim8371/pdf-watermark#-privacy-and-uninstalling).
           NOTES
           gh release create "$GITHUB_REF_NAME" assets/* --title "PDF Watermark $GITHUB_REF_NAME" --notes-file notes.md --verify-tag

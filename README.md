@@ -40,6 +40,8 @@ PDF Watermark
 - [🚀 Getting Started](#-getting-started)
 - [🤖 Using PDF Watermark](#-using-pdf-watermark)
 - [🗺 Roadmap](#-roadmap)
+- [🔏 Code signing policy](#-code-signing-policy)
+- [🔒 Privacy and uninstalling](#-privacy-and-uninstalling)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 - [👏 Acknowledgments](#-acknowledgments)
@@ -93,6 +95,9 @@ right on all of them.
 
 All versions are on the [Releases page](https://github.com/Fahim8371/pdf-watermark/releases).
 A Mac version is planned; in the meantime the command line runs on macOS and Linux.
+
+Windows releases are built by GitHub Actions straight from this repository and
+code-signed through the SignPath Foundation — see the [code signing policy](#-code-signing-policy).
 
 ---
 
@@ -349,6 +354,43 @@ never stack up.
 > - [ ] Image and logo watermarks
 > - [ ] Entering a password for protected PDFs inside the app
 > - [ ] Faster exports by marking several files at once
+
+---
+
+## 🔏 Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
+
+Every Windows release is built by the [release workflow](.github/workflows/release.yml)
+on GitHub Actions directly from the source code in this repository, and only
+those builds are submitted for signing.
+
+| Role | Members |
+| --- | --- |
+| Committers and reviewers | [Fahim8371](https://github.com/Fahim8371) |
+| Approvers | [Fahim8371](https://github.com/Fahim8371) |
+
+Changes from anyone outside the committers are reviewed before they are merged,
+and every signing request is approved by an approver. All team members use
+multi-factor authentication for GitHub and SignPath.
+
+---
+
+## 🔒 Privacy and uninstalling
+
+**Privacy policy:** This program will not transfer any information to other
+networked systems unless specifically requested by the user or the person
+installing or operating it. Your documents are processed entirely on your own
+computer. The only time the app goes online is if you click *Need help?*,
+which opens this page in your web browser.
+
+**What it changes on your computer:** nothing is installed. The app keeps its
+settings, the companies you choose to save, a font list and a small log in one
+folder: `%APPDATA%\PDF Watermark` on Windows.
+
+**Uninstalling:** delete `PDF-Watermark-Windows.exe`, and if you want to remove
+your settings and saved companies too, delete the `%APPDATA%\PDF Watermark`
+folder (paste that into the File Explorer address bar to find it).
 
 ---
 
