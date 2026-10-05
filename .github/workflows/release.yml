@@ -1,0 +1,119 @@
+name: Release
+
+# Push a version tag and this builds the app for Windows and macOS and
+# publishes both on the repository's Releases page:
+#
+#     echo 1.1.0 > VERSION && git commit -am "Release 1.1.0"
+#     git tag v1.1.0 && git push --follow-tags
+#
+# The builds are not code-signed, so Windows SmartScreen and macOS Gatekeeper
+# each ask once before the first launch; the README walks people through it.
+# Signing can be added later with repository secrets, no other changes needed.
+on:
+  push:
+    tags: ["v[0-9]*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "pymupdf>=1.24" "fonttools>=4.40" pytest
+      - run: python -m pytest -q
+
+  build:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            asset: PDF-Watermark-Windows.exe
+          - os: macos-latest            # Apple Silicon (M1 and later)
+            asset: PDF-Watermark-macOS-Apple-Silicon.dmg
+          - os: macos-15-intel          # Intel Macs
+            asset: PDF-Watermark-macOS-Intel.dmg
+            optional: true
+    runs-on: ${{ matrix.os }}
+    # If GitHub retires the Intel runner, the release still goes out without it.
+    continue-on-error: ${{ matrix.optional == true }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Check the tag matches VERSION
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          if [ "v$(cat VERSION)" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match VERSION ($(cat VERSION))" >&2
+            exit 1
+          fi
+
+      - name: Stamp the version into the Windows file properties
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          V=$(cat VERSION); T=$(echo "$V" | tr . ,)
+          sed -i "s/(1, 0, 0, 0)/($T, 0)/g; s/'1\.0\.0'/'$V'/g" packaging/version_info.txt
+
+      - run: pip install -r requirements.txt "pyinstaller>=6.5"
+      - run: pyinstaller packaging/pdf-watermark.spec --noconfirm
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: mv "dist/PDF Watermark.exe" "dist/${{ matrix.asset }}"
+
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # Ad-hoc signature: required for Apple Silicon to run the app at all.
+          codesign --force --deep --sign - "dist/PDF Watermark.app"
+          mkdir dmg
+          cp -R "dist/PDF Watermark.app" dmg/
+          ln -s /Applications dmg/Applications
+          hdiutil create -volname "PDF Watermark" -srcfolder dmg -ov -format UDZO "dist/${{ matrix.asset }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd assets && sha256sum * > SHA256SUMS.txt && cd ..
+          cat > notes.md <<'NOTES'
+          **Download** the file for your computer below:
+
+          - **Windows** - `PDF-Watermark-Windows.exe`. Double-click to run; nothing to install. The first time, Windows may show *"Windows protected your PC"*: click **More info**, then **Run anyway**.
+          - **Mac** - `PDF-Watermark-macOS-Apple-Silicon.dmg` for M1 and newer Macs, `PDF-Watermark-macOS-Intel.dmg` for older Intel Macs (Apple menu → About This Mac shows which). Open it and drag **PDF Watermark** into **Applications**. The first time, macOS will say it can't check the app: open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.
+
+          These prompts appear because the app is not code-signed. They only happen once.
+          NOTES
+          gh release create "$GITHUB_REF_NAME" assets/* --title "PDF Watermark $GITHUB_REF_NAME" --notes-file notes.md --verify-tag

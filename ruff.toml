@@ -1,0 +1,7 @@
+line-length = 120
+extend-exclude = [".venv", "build", "dist"]
+
+[lint]
+select = ["E", "F", "W", "B", "I"]
+# Column-aligned assignments in the CONFIG block are deliberate.
+ignore = ["E501", "E221", "E241"]

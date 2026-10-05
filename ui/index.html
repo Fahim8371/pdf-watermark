@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF Watermark</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Soft pastel glows behind everything -->
+<div class="backdrop" aria-hidden="true">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <span class="blob b4"></span>
+</div>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><rect x="7" y="4" width="18" height="24" rx="3.5" fill="#fff" opacity=".95"/><path d="M9 22 23 10" stroke="url(#lg)" stroke-width="3.2" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#2aa3ff"/><stop offset="1" stop-color="#8b7bff"/></linearGradient></defs></svg>
+      </div>
+      <span>PDF Watermark</span>
+    </div>
+
+    <nav class="steps" id="steps" aria-label="Steps">
+      <div class="spot" id="spot" aria-hidden="true"></div>
+      <button data-step="0"><span class="step-ic"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>Files</button>
+      <button data-step="1"><span class="step-ic"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg></span>Design</button>
+      <button data-step="2"><span class="step-ic"><svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg></span>Export</button>
+    </nav>
+
+    <div class="topbar-side"></div>
+  </header>
+
+  <main class="card">
+
+    <!-- 1 · FILES -->
+    <section class="view" data-view="0">
+      <div class="view-head">
+        <h1>Add your documents</h1>
+        <p>Drop in PDFs or whole folders. Your originals are never changed.</p>
+      </div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="folder-tile" aria-hidden="true">
+          <svg viewBox="0 0 48 40"><path d="M4 8a4 4 0 0 1 4-4h10l4 4h18a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" fill="url(#fg)"/><path d="M4 14h40v18a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" fill="url(#fg2)"/><path d="m24 18 1.6 3.4L29 23l-3.4 1.6L24 28l-1.6-3.4L19 23l3.4-1.6z" fill="#2b2b30"/><defs><linearGradient id="fg" y2="1" x2="0"><stop offset="0" stop-color="#9a9aa3"/><stop offset="1" stop-color="#6d6d76"/></linearGradient><linearGradient id="fg2" y2="1" x2="0"><stop offset="0" stop-color="#c9c9d0"/><stop offset="1" stop-color="#8c8c95"/></linearGradient></defs></svg>
+        </div>
+        <h2>Drag and drop PDFs or folders here</h2>
+        <p>Subfolders are included. Anything that isn't a PDF is skipped.</p>
+        <div class="row gap-sm">
+          <button class="btn btn-ghost" id="pickFiles">Select files</button>
+          <button class="btn btn-ghost" id="pickFolder">Select folder</button>
+        </div>
+      </div>
+
+      <ul class="sources" id="sources"></ul>
+
+      <details class="disclosure">
+        <summary>What happens to my files?<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <div class="quest">
+          <div class="quest-step"><span class="qn">I</span><b>Add</b><span>Pick the documents you want to send.</span></div>
+          <div class="quest-step"><span class="qn">II</span><b>Name</b><span>Say who each copy is for.</span></div>
+          <div class="quest-step"><span class="qn">III</span><b>Design</b><span>Style and place the mark, with a live preview.</span></div>
+          <div class="quest-step"><span class="qn">IV</span><b>Export</b><span>Marked copies land in a new folder. Originals stay untouched.</span></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 2 · DESIGN -->
+    <section class="view view-design" data-view="1">
+      <div class="design-controls" id="designControls">
+
+        <div class="section">
+          <div class="section-title"><span>Recipients</span><span class="section-note" id="recipientCount"></span></div>
+          <div class="input-wrap compact">
+            <svg class="input-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            <input id="recipientInput" type="text" placeholder="Add a company and press Enter" autocomplete="off"
+                   aria-label="Recipient name">
+            <button class="btn btn-light btn-sm" id="addRecipient">Add</button>
+          </div>
+          <div class="saved" id="saved" hidden>
+            <span class="hint-inline">Saved on this computer — click to add</span>
+            <div class="chips" id="savedChips"></div>
+          </div>
+          <ul class="rlist" id="recipients"></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title"><span id="formatLabel">Mark text</span></div>
+          <div class="select" id="formatSelect">
+            <button type="button" class="select-trigger" id="formatTrigger"
+                    aria-haspopup="listbox" aria-expanded="false" aria-labelledby="formatLabel formatTrigger">
+              <span class="select-value" id="formatValue"></span>
+              <svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="select-menu" id="formatMenu" role="listbox" tabindex="-1" aria-labelledby="formatLabel" hidden></ul>
+          </div>
+          <div class="customise" id="customise" hidden>
+            <label class="customise-row">
+              <span class="field-label">Text before the name</span>
+              <input class="text-input" id="prefixText" type="text" maxlength="40"
+                     placeholder="Leave empty for the name on its own" spellcheck="false" autocomplete="off">
+            </label>
+            <div class="chips" id="prefixPresets">
+              <button type="button" class="chip" data-preset="CONFIDENTIAL">CONFIDENTIAL</button>
+              <button type="button" class="chip" data-preset="PRIVATE &amp; CONFIDENTIAL">PRIVATE &amp; CONFIDENTIAL</button>
+              <button type="button" class="chip" data-preset="DRAFT">DRAFT</button>
+              <button type="button" class="chip" data-preset="FOR REVIEW">FOR REVIEW</button>
+              <button type="button" class="chip" data-preset="COPY">COPY</button>
+              <button type="button" class="chip" data-preset="">Name only</button>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="dateToggle">
+              <span class="switch" aria-hidden="true"></span>
+              <span>Add today's date</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title"><span>Text</span></div>
+          <div class="toolbar" role="toolbar" aria-label="Text style">
+            <div class="font-picker" id="fontPicker">
+              <button type="button" class="font-trigger" id="fontTrigger" aria-haspopup="listbox" aria-expanded="false"
+                      data-tip="Font" data-keys="mod+shift+F">
+                <span id="fontValue">Helvetica</span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="font-menu" id="fontMenu" hidden>
+                <div class="font-search">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                  <input type="text" id="fontSearch" placeholder="Search fonts" autocomplete="off" spellcheck="false" aria-label="Search fonts">
+                </div>
+                <ul id="fontList" role="listbox" aria-label="Fonts"></ul>
+              </div>
+            </div>
+            <span class="tb-sep"></span>
+            <button type="button" class="tb-btn" id="boldBtn" aria-pressed="true" data-tip="Bold" data-keys="mod+B"><b>B</b></button>
+            <button type="button" class="tb-btn" id="italicBtn" aria-pressed="false" data-tip="Italic" data-keys="mod+I"><i class="serif-i">I</i></button>
+            <button type="button" class="tb-btn" id="outlineBtn" aria-pressed="false" data-tip="Outline letters" data-keys="mod+shift+L">
+              <svg viewBox="0 0 24 24"><path d="M5 20 11 4h2l6 16M8 14h8" class="outline-a"/></svg>
+            </button>
+            <span class="tb-sep"></span>
+            <div class="color-picker" id="colorPicker">
+              <button type="button" class="tb-btn" id="colorBtn" aria-haspopup="true" aria-expanded="false" data-tip="Colour">
+                <span class="color-dot" id="colorDot"></span>
+              </button>
+              <div class="color-pop" id="colorPop" hidden>
+                <div class="swatches" id="swatches">
+                  <button data-color="grey"  style="--sw:#999" aria-label="Grey"></button>
+                  <button data-color="red"   style="--sw:#d93333" aria-label="Red"></button>
+                  <button data-color="blue"  style="--sw:#2659d9" aria-label="Blue"></button>
+                  <button data-color="black" style="--sw:#111;--ring:#555" aria-label="Black"></button>
+                  <label class="custom-swatch" title="Any colour">
+                    <input type="color" id="customColor" value="#2f8f4e" aria-label="Pick any colour">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="control slim">
+            <div class="label-row"><span class="field-label">Size</span><span class="value" id="sizeValue">100%</span></div>
+            <input type="range" id="size" min="40" max="100" step="5" value="100" aria-label="Size">
+          </div>
+          <div class="control slim">
+            <div class="label-row"><span class="field-label">Strength</span><span class="value" id="opacityValue">40%</span></div>
+            <input type="range" id="opacity" min="10" max="80" step="5" value="40" aria-label="Strength">
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title"><span>Placement</span></div>
+          <div class="segmented" id="layoutSeg">
+            <button data-layout="diagonal" data-tip="Diagonal" data-keys="D">Diagonal</button>
+            <button data-layout="tile" data-tip="Tiled" data-keys="T">Tiled</button>
+            <button data-layout="position" data-tip="Stamp" data-keys="S">Stamp</button>
+          </div>
+          <p class="hint" id="layoutHint"></p>
+
+          <div class="placement-row" id="positionControls" hidden>
+            <div class="pos-grid" id="posGrid" role="radiogroup" aria-label="Stamp position"></div>
+            <div class="pos-help">
+              <b id="positionName">Bottom centre</b>
+              <span>Pick a spot, or drag the stamp on the preview. Keys <span class="kbd">1</span>–<span class="kbd">9</span> match the grid; arrow keys nudge it.</span>
+            </div>
+          </div>
+
+          <div class="control slim" id="angleControl">
+            <span class="field-label">Angle</span>
+            <div class="segmented" id="angleSeg">
+              <button data-angle="diagonal">Corner to corner</button>
+              <button data-angle="45">45°</button>
+              <button data-angle="0">Flat</button>
+            </div>
+          </div>
+
+          <label class="toggle stack-toggle">
+            <input type="checkbox" id="stackToggle">
+            <span class="switch" aria-hidden="true"></span>
+            <span>Put the name on its own line</span>
+          </label>
+        </div>
+
+        <div class="section last">
+          <label class="toggle toggle-block">
+            <input type="checkbox" id="flattenToggle">
+            <span class="switch" aria-hidden="true"></span>
+            <span><b>Extra protection</b><small>Turns pages into images so the mark can't be selected or deleted. Files get bigger and text can't be copied.</small></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="preview-pane">
+        <div class="preview-stage" id="previewStage">
+          <canvas id="previewCanvas" width="595" height="842"></canvas>
+          <img id="previewImg" alt="Preview of the watermarked page" hidden>
+          <div class="drag-handle" id="dragHandle" tabindex="0" role="slider" hidden
+               aria-label="Stamp position - drag, or use the arrow keys" data-tip="Drag to move" data-keys="←↑↓→"></div>
+        </div>
+        <div class="preview-bar">
+          <button class="icon-btn" id="prevPage" aria-label="Previous document" data-tip="Previous document" data-keys="["><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+          <span id="previewLabel">report.pdf</span>
+          <button class="icon-btn" id="nextPage" aria-label="Next document" data-tip="Next document" data-keys="]"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · EXPORT -->
+    <section class="view" data-view="2">
+      <div id="exportReady">
+        <div class="view-head">
+          <h1>Ready to export</h1>
+          <p>Check the summary, then create your copies.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat" style="--tint:#8fb4ff"><span id="statPdfs">0</span><small>Documents</small></div>
+          <div class="stat" style="--tint:#c4a8ff"><span id="statRecipients">0</span><small>Recipients</small></div>
+          <div class="stat" style="--tint:#8fe3c8"><span id="statFiles">0</span><small>Copies to create</small></div>
+        </div>
+
+        <span class="field-label">Save to</span>
+        <div class="choice-grid">
+          <button class="choice choice-row" data-out="beside">
+            <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <div><b>Next to the originals</b><span>A new folder beside each one</span></div>
+          </button>
+          <button class="choice choice-row" data-out="custom" id="chooseOut">
+            <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5h5"/></svg>
+            <div><b>Somewhere else…</b><span id="outDirLabel">Choose a folder</span></div>
+          </button>
+        </div>
+
+        <details class="disclosure" id="planDetails">
+          <summary>See every file that will be created<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="plan" id="plan"></div>
+        </details>
+      </div>
+
+      <div id="exportRunning" hidden>
+        <div class="view-head">
+          <h1 id="runTitle">Creating your copies…</h1>
+          <p id="runSub">This can take a minute for large drawings.</p>
+        </div>
+        <div class="progress-row">
+          <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+          <span class="progress-count" id="progressCount">0/0 completed</span>
+        </div>
+        <ul class="log" id="log"></ul>
+        <div class="row center run-actions">
+          <button class="btn btn-dark" id="cancelRun">Cancel</button>
+        </div>
+      </div>
+
+      <div id="exportDone" class="done" hidden>
+        <div class="check-tile" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+        </div>
+        <h1 id="doneTitle">All done</h1>
+        <p id="doneSub"></p>
+        <div class="notice" id="doneErrors" hidden></div>
+        <div class="row gap-sm center">
+          <button class="btn btn-ghost" id="startOver">Start over</button>
+          <button class="btn btn-accent" id="openOutput">Open folder</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="notice" id="notice" hidden>
+      <svg viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg>
+      <span id="noticeText"></span>
+    </div>
+
+    <footer class="card-foot">
+      <div class="row gap-md">
+        <button class="link" id="help">Need help?<svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+        <button class="link" id="showShortcuts" data-tip="Keyboard shortcuts" data-keys="?">
+          <svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6.5 10h1M10.5 10h1M14.5 10h1M8 14h8"/></svg>Shortcuts
+        </button>
+      </div>
+      <div class="row gap-sm">
+        <button class="btn btn-dark" id="back">Back</button>
+        <button class="btn btn-light" id="next">Continue</button>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<div class="modal-backdrop" id="shortcutsModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="modal-head">
+      <h2 id="shortcutsTitle">Keyboard shortcuts</h2>
+      <button class="remove" id="closeShortcuts" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="shortcut-list" id="shortcutList"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

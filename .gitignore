@@ -17,3 +17,7 @@ watermarked/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Build output
+build/
+dist/
