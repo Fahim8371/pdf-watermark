@@ -85,7 +85,7 @@ right on all of them.
 
 ## 💿 Download
 
-📦 **[PDF-Watermark-Windows.exe](https://github.com/Fahim8371/pdf-watermark/releases/latest/download/PDF-Watermark-Windows.exe)** — about 38 MB
+📦 **[PDF-Watermark-Windows.exe](https://github.com/Fahim8371/pdf-watermark/releases/latest/download/PDF-Watermark-Windows.exe)** — about 32 MB
 
 > 💡 Runs on Windows 10 and 11. Nothing to install: download it and double-click.
 > The first time, Windows may show *"Windows protected your PC"* because the app
